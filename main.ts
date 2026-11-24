@@ -25,6 +25,12 @@ function gate(line: string): void {
   if (line.includes("\n") || line.includes("\r")) {
     throw new Error("entry must be a single line");
   }
+  // One sentence, one breath: exactly one sentence terminator, and it must
+  // be the final character, so the line cannot smuggle in a second sentence.
+  const terminators = (line.match(/[.!?]/g) ?? []).length;
+  if (terminators !== 1 || !/[.!?]$/.test(line)) {
+    throw new Error("entry must be exactly one sentence");
+  }
   if (line.trim().length === 0) {
     throw new Error("entry must not be only whitespace");
   }
